@@ -27,6 +27,10 @@ type Conn struct {
 	Dial DialFunc
 	// Auth the auth service to authenticate the user for socks5
 	Auth AuthService
+	// Enable socks4 protocol
+	Socks4Enabled bool
+	// Enable socks5 protocol
+	Socks5Enabled bool
 }
 
 // Serve serve the client
@@ -48,11 +52,19 @@ func (s *Conn) Serve() {
 
 	switch buf[0] {
 	case socks4Version:
-		s4 := socks4Conn{clientConn: s.Conn, dial: dial}
-		s4.Serve(buf, n)
+		if s.Socks4Enabled == true {
+			s4 := socks4Conn{clientConn: s.Conn, dial: dial}
+			s4.Serve(buf, n)
+		} else {
+			log.Printf("socks4 is not enabled")
+		}
 	case socks5Version:
-		s5 := socks5Conn{clientConn: s.Conn, dial: dial, auth: s.Auth}
-		s5.Serve(buf, n)
+		if s.Socks5Enabled == true {
+			s5 := socks5Conn{clientConn: s.Conn, dial: dial, auth: s.Auth}
+			s5.Serve(buf, n)
+		} else {
+			log.Printf("socks5 is not enabled")
+		}
 	default:
 		log.Printf("unknown socks version 0x%x", buf[0])
 		s.Conn.Close()
