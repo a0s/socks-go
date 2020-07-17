@@ -1,7 +1,7 @@
 package main
 
 import (
-	socks "github.com/fangdingjun/socks-go"
+	socks "github.com/a0s/socks-go"
 	"log"
 	"net"
 	"time"
@@ -23,7 +23,7 @@ func main() {
 		log.Printf("connected from %s", c.RemoteAddr())
 
 		d := net.Dialer{Timeout: 10 * time.Second}
-		s := socks.Conn{Conn: c, Dial: d.Dial}
+		s := socks.Conn{Conn: c, Dial: d.Dial, Socks4Enabled: true, Socks5Enabled: true}
 		go s.Serve()
 	}
 }

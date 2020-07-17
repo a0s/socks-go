@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"crypto/tls"
-	socks "github.com/fangdingjun/socks-go"
+	socks "github.com/a0s/socks-go"
 	"io"
 	"log"
 	"net"
